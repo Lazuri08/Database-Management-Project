@@ -1,0 +1,115 @@
+DROP SCHEMA GROUPXXSCHEMA;
+CREATE SCHEMA GROUPXXSCHEMA;
+USE GROUPXXSCHEMA;
+
+CREATE TABLE Doctors(
+	DoctorID INT PRIMARY KEY,
+    Name VARCHAR(20)
+);
+
+CREATE TABLE employeeType(
+	typeID INT PRIMARY KEY,
+    Name VARCHAR(20)
+);
+
+CREATE TABLE employees(
+	employeeID INT PRIMARY KEY,
+    Name VARCHAR(20),
+    employeeTypeID INT,
+	FOREIGN KEY (employeeTypeID) REFERENCES employeeType(typeID)
+);
+
+CREATE TABLE patients(
+	PatientID INT PRIMARY KEY,
+    Name VARCHAR(20)
+);
+
+
+CREATE TABLE bookingStatus(
+	statusID INT PRIMARY KEY,
+    Name VARCHAR(20)
+);
+
+
+CREATE TABLE Bookings(
+	bookingID INT PRIMARY KEY,
+    secretaryID INT,
+    DoctorID INT,
+    bookingStatusID INT,
+    Fine INT,
+    Date DATE,
+    TIME TIME,
+    FOREIGN KEY (SecretaryID) REFERENCES Employees(EmployeeID),
+    FOREIGN KEY (doctorID) REFERENCES doctors(doctorID),
+	FOREIGN KEY (bookingStatusID) REFERENCES bookingStatus(statusID)
+);
+
+
+CREATE TABLE visit(
+	visitID INT PRIMARY KEY,
+    patientID INT,
+    NurseID INT,
+    BloodPressure Varchar(20),
+    temperature Varchar(20),
+    height Varchar(20),
+    weight Varchar(20),
+    feeCharged INT,
+	FOREIGN KEY (NurseID) REFERENCES Employees(EmployeeID),
+    FOREIGN KEY (patientID) REFERENCES patients(patientID)
+);
+
+
+CREATE TABLE tests(
+	testID INT PRIMARY KEY,
+    Name VARCHAR(20)
+);
+
+CREATE TABLE patientTests(
+	patientTestID INT PRIMARY KEY,
+    bookingID INT,
+    testID INT,
+    NurseID INT,
+    Result VARCHAR(20),
+    FOREIGN KEY (nurseID) REFERENCES Employees(EmployeeID),
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
+    FOREIGN KEY (testID) REFERENCES tests(testID)
+);
+
+
+CREATE TABLE DoctorNotes(
+    BookingID INT,
+    symptoms VARCHAR(200),
+    diagnosis VARCHAR(200),
+    prescription VARCHAR(200),
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID)
+);
+
+
+CREATE TABLE referral(
+	BookingID INT,
+    referralDoctorID INT,
+    FOREIGN KEY (bookingID) REFERENCES bookings(bookingID),
+    FOREIGN KEY (referralDoctorID) REFERENCES doctors(doctorID)
+);
+
+
+CREATE TABLE shifts(
+	shiftID INT PRIMARY KEY,
+    TimeFROM TIME,
+    TimeTo TIME 
+);
+
+CREATE TABLE doctorShifts(
+	doctorID INT,
+    shiftID INT,
+    FOREIGN KEY (doctorID) REFERENCES doctors(doctorID),
+    FOREIGN KEY (shiftID) REFERENCES shifts(shiftID)
+);
+
+CREATE TABLE payments(
+	paymentID INT PRIMARY KEY,
+    employeeID INT,
+    PaymentDate DATE,
+    Amount INT,
+    FOREIGN KEY (employeeID) REFERENCES Employees(EmployeeID)
+);
